@@ -6,9 +6,14 @@ const observer = new MutationObserver((mutations) => {
 });
 
 const updateVideoTags = (
-    videoTags = document.getElementsByTagName('video')
+    videoTags = document.getElementsByTagName('video'),
+    disableControls = false
 ) => {
     Array.from(videoTags).forEach((videoTag) => {
+        if (disableControls) {
+            videoTag.removeAttribute('controls');
+            return;
+        }
         const controls = videoTag.getAttribute('controls');
         if (controls == null || controls == 'false')
             videoTag.setAttribute('controls', true);
@@ -20,6 +25,11 @@ const enableObservation = () => {
     observer.observe(document, { childList: true, subtree: true });
 };
 
+const disableObservation = () => {
+    observer.disconnect();
+    updateVideoTags(document.getElementsByTagName('video'), true);
+};
+
 // Initial inject
 chrome.storage.local.get(['enabled'], ({ enabled }) => {
     if (enabled) enableObservation();
@@ -27,5 +37,5 @@ chrome.storage.local.get(['enabled'], ({ enabled }) => {
 
 chrome.storage.onChanged.addListener(function (changes) {
     if (changes.enabled?.newValue) enableObservation();
-    else if (!changes.enabled?.newValue) observer.disconnect();
+    else if (!changes.enabled?.newValue) disableObservation();
 });
