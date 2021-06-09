@@ -1,0 +1,35 @@
+{
+    "manifest_version": 3,
+    "name": "Show video controls",
+    "version": "1.0",
+    "permissions": ["storage"],
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "exclude_matches": [
+                "*://*.youtube.com/*",
+                "*://*.netflix.com/*",
+                "*://*.vimeo.com/*",
+                "*://*.twitch.tv/*",
+                "*://youtube.com/*",
+                "*://youtu.be/*",
+                "*://netflix.com/*",
+                "*://vimeo.com/*",
+                "*://twitch.tv/*"
+            ],
+            "js": [
+                "showControls.js"
+            ]
+        }
+    ],
+    "action": {
+    "default_popup": "popup.html"
+    },
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    }
+}
